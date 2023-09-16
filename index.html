@@ -1,18 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interval Timer</title>
+    <title>Countdown Timer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <div class="timer-container">
-        <span id="timer">00:00:00</span>
-        <button id="toggleInterval">Switch to 1hr</button>
-        <button id="startStop">Start</button>
+    <div class="container">
+        <h1>Countdown Timer</h1>
+
+        <div id="timer-display" style="font-size: 24px; text-align: center; margin-bottom: 20px;">
+            00:30:00
+        </div>
+
+        <div class="interval-toggle">
+            <div>
+                <input type="radio" id="30min" name="interval" value="30min" checked>
+                <label for="30min">30 minutes</label>
+            </div>
+            <div>
+                <input type="radio" id="60min" name="interval" value="60min">
+                <label for="60min">60 minutes</label>
+            </div>
+        </div>
+
+        <button id="start">Start</button>
+        <button id="stop" style="margin-left: 10px;">Stop</button>
     </div>
-    <audio id="chime" src="chime.mp3"></audio>
+
     <script src="scripts.js"></script>
 </body>
+
 </html>
