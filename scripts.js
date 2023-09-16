@@ -1,66 +1,50 @@
 let timer;
+let minutesLeft;
+let secondsLeft;
+let intervalDuration;
 let isRunning = false;
-let seconds = 0;
-let minutes = 0;
-let hours = 0;
-let interval = 30; // Default to 30 minutes
 
-const timerDisplay = document.getElementById('timer');
-const startStopBtn = document.getElementById('startStop');
-const toggleIntervalBtn = document.getElementById('toggleInterval');
-const chimeSound = document.getElementById('chime');
+document.querySelector('#start').addEventListener('click', () => {
+    if (isRunning) return;
+    isRunning = true;
+
+    let selectedInterval = document.querySelector('input[name="interval"]:checked').value;
+    intervalDuration = selectedInterval == "30min" ? 30 : 60; // Duration in minutes
+
+    minutesLeft = intervalDuration - 1;
+    secondsLeft = 59;
+    updateDisplay();
+
+    timer = setInterval(() => {
+        if (secondsLeft == 0) {
+            if (minutesLeft == 0) {
+                clearInterval(timer);
+                // Here you can add a sound or an alert to notify that the timer has ended.
+            } else {
+                minutesLeft--;
+                secondsLeft = 59;
+            }
+        } else {
+            secondsLeft--;
+        }
+
+        if (minutesLeft == 2 && secondsLeft == 0) {
+            // Play a chime sound 2 minutes before the timer ends.
+            let chime = new Audio('chime.mp3');
+            chime.play();
+        }
+
+        updateDisplay();
+    }, 1000);
+});
+
+document.querySelector('#stop').addEventListener('click', () => {
+    clearInterval(timer);
+    isRunning = false;
+});
 
 function updateDisplay() {
-    let formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-    let formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    let formattedHours = hours < 10 ? `0${hours}` : hours;
-    timerDisplay.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    let minString = minutesLeft.toString().padStart(2, '0');
+    let secString = secondsLeft.toString().padStart(2, '0');
+    document.getElementById('timer-display').textContent = `${minString}:${secString}`;
 }
-
-function playChime() {
-    chimeSound.play();
-}
-
-function toggleTimer() {
-    if (isRunning) {
-        isRunning = false;
-        clearInterval(timer);
-        startStopBtn.textContent = "Start";
-    } else {
-        isRunning = true;
-        timer = setInterval(() => {
-            seconds++;
-            if (seconds === 60) {
-                minutes++;
-                seconds = 0;
-            }
-            if (interval - minutes === 2 && seconds === 0) {
-                playChime();
-            }
-            if (minutes === interval) {
-                clearInterval(timer);
-                isRunning = false;
-                startStopBtn.textContent = "Start";
-            }
-            if (minutes === 60) {
-                hours++;
-                minutes = 0;
-            }
-            updateDisplay();
-        }, 1000);
-        startStopBtn.textContent = "Stop";
-    }
-}
-
-function toggleInterval() {
-    if (interval === 30) {
-        interval = 60;
-        toggleIntervalBtn.textContent = "Switch to 30min";
-    } else {
-        interval = 30;
-        toggleIntervalBtn.textContent = "Switch to 1hr";
-    }
-}
-
-startStopBtn.addEventListener('click', toggleTimer);
-toggleIntervalBtn.addEventListener('click', toggleInterval);
