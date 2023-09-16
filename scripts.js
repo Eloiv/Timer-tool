@@ -3,7 +3,7 @@ let isRunning = false;
 let seconds = 0;
 let minutes = 0;
 let hours = 0;
-let interval = 30;
+let interval = 30; // Default to 30 minutes
 
 const timerDisplay = document.getElementById('timer');
 const startStopBtn = document.getElementById('startStop');
@@ -53,4 +53,14 @@ function toggleTimer() {
 }
 
 function toggleInterval() {
-    if (
+    if (interval === 30) {
+        interval = 60;
+        toggleIntervalBtn.textContent = "Switch to 30min";
+    } else {
+        interval = 30;
+        toggleIntervalBtn.textContent = "Switch to 1hr";
+    }
+}
+
+startStopBtn.addEventListener('click', toggleTimer);
+toggleIntervalBtn.addEventListener('click', toggleInterval);
